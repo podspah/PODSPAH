@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Pagamento</title>
+    <style>
+        /* Estilo para a seção de pagamento */
+        #payment-container {
+            text-align: center;
+            padding: 20px;
+            max-width: 400px;
+            margin: auto;
+            background-color: #333; /* Fundo escuro */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: white; /* Define as letras como brancas */
+        }
+
+        #payment-container h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        #payment-amount, #payment-protocol, #payment-message {
+            font-size: 1.1em;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        #ordered-products {
+            font-size: 1em;
+            color: white;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        #qrcode img {
+            width: 120px; /* Tamanho reduzido do QR Code */
+            height: 120px;
+            margin: 10px 0;
+        }
+
+        #copy-pix-key {
+            background-color: #007BFF; /* Cor do botão */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #copy-pix-key:hover {
+            background-color: #0056b3; /* Efeito hover */
+        }
+
+        #instagram-link {
+            display: block;
+            margin-top: 15px;
+            font-size: 1em;
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        #instagram-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="payment-container">
+        <h2>Detalhes do Pagamento</h2>
+        <p id="payment-amount"></p>
+        <p id="payment-protocol"></p>
+        <div id="ordered-products"></div> <!-- Para mostrar produtos pedidos -->
+        <div id="qrcode">
+            <img src="qrcode.png" alt="QR Code para pagamento" />
+        </div>
+        <p>Caso prefira, copie a chave Pix: <strong>b393acba-76e7-4bd3-9e64-d7dc5f2b7bdb</strong></p>
+        <button id="copy-pix-key" onclick="copyPixKey()">Copiar Chave Pix</button>
+        <p id="payment-message"></p>
+        <a href="https://www.instagram.com/poods_pahh?igsh=MXRzeGh5MjF4Yno3MA==" target="_blank" id="instagram-link">Visite nosso Instagram</a>
+    </div>
+
+    <script>
+        // Exibe o valor do pagamento, protocolo e produtos pedidos
+        document.addEventListener('DOMContentLoaded', function() {
+            const total = localStorage.getItem('totalPedido');
+            const protocolNumber = localStorage.getItem('protocolNumber'); // Recupera o número do protocolo
+            const orderedProducts = JSON.parse(localStorage.getItem('orderedProducts')) || []; // Recupera os produtos pedidos
+
+            if (total) {
+                document.getElementById('payment-amount').textContent = `Total a Pagar: R$ ${total}`;
+                document.getElementById('payment-protocol').textContent = `Protocolo: ${protocolNumber}`;
+                
+                // Exibe os produtos pedidos
+                const productsList = orderedProducts.map(item => `${item.name} - R$ ${item.price.toFixed(2)} (x${item.quantity})`).join('<br>');
+                document.getElementById('ordered-products').innerHTML = `<strong>Produtos Pedidos:</strong><br>${productsList}`;
+                
+                document.getElementById('payment-message').textContent = "Obrigado pelo seu pedido! Estamos processando sua compra. Para finalizar, entre em contato no direct abaixo, envie o comprovante, escolha os sabores e nos confirme seu endereço para entrega.";
+            }
+        });
+
+        // Função para copiar a chave Pix
+        function copyPixKey() {
+            const pixKey = 'b393acba-76e7-4bd3-9e64-d7dc5f2b7bdb'; // Substitua pela sua chave Pix
+            navigator.clipboard.writeText(pixKey).then(() => {
+                alert('Chave Pix copiada para a área de transferência!');
+            }).catch(err => {
+                console.error('Erro ao copiar a chave Pix: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
